@@ -46,7 +46,23 @@ document.addEventListener('DOMContentLoaded', () => {
         return clearInterval(interval) // this will clear interval if any of the above happpens
         
     }
+    const tail = currentSnake.pop() 
+    squares[tail].classList.remove('snake')
+    currentSnake.unshift(currentSnake[0] + direction) //diamo la direzione alla testa dell'Array(serpente)
 
+    //deals with snake getting apple
+    if(squares[currentSnake[0]].classList.contains('apple')) {
+        squares[currentSnake[0]].classList.remove('apple')
+        squares[tail].classList.add('snake')
+        currentSnake.push(tail)
+        //randomApple()
+        score++
+        scoreDisplay.textContent = score
+        clearInterval(interval)
+        intervalTime = intervalTime * speed
+        interval = setInterval(moveOutcomes, intervalTime)
+    }
+    squares[currentSnake[0]].classList.add('snake')
 
      }
 
@@ -69,7 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
     document.addEventListener('keyup', control) // abbiamo costruito un EventListener che diche : 'ogni volta che una delle frecce viene schiacciata, esegui la funzione control'
-
+    startBtn.addEventListener('click', startGame)
 
 
 
