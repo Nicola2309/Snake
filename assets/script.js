@@ -15,8 +15,45 @@ document.addEventListener('DOMContentLoaded', () => {
     let intervalTime = 0
     let interval = 0
 
-    // assegnamo funzioni alle frecce della tastiera,ogni tasto della tastiera ha un suo 'KEYCODE'.
-    //Assegnandogli le funzioni decidiamo cosa quel tasto debba fare
+
+    //costruiamo la funzione per lo Start e il Restart del gioco
+    function startGame() {
+        currentSnake.forEach(index => squares[index].classList.remove('snake')) //prendiamo in considerazione "Each index del currentSnake Array", e 'rimuoviamo la classe snake da ogni index a parte quelli del currentSnake array'
+        squares[appleIndex].classList .remove('apple')  
+        clearInterval(interval)
+        score = 0
+        //randomApple(), stiamo resettando tutto in questa funzione
+        direction = 1
+        scoreDisplay.innerText = score
+        intervalTime = 1000
+        currentSnake = [2,1,0]
+        currentIndex = 0
+        currentSnake.forEach(index => squares [index].classList.add('snake'))
+        interval = setInterval(moveOutComes, intervalTime)
+     }
+     
+     // funzione che si occupa di tutti i movimenti del serpente
+     function moveOutComes() {
+
+    // parte che si occupa del serpente quando colpisce il muro o se stesso
+    if (
+        (currentSnake[0] + width >= (width * width) && direction === width ) || //if snake hits bottom
+        (currentSnake[0] % width === width -1 && direction === 1) || //if snake hits right wall
+        (currentSnake[0] % width === 0 && direction === -1) || //if snake hits left wall
+        (currentSnake[0] - width < 0 && direction === -width) || //if snake hits the top
+        squares[currentSnake[0] + direction].classList.contains('snake') //if snake goes into itself
+    ) {
+        return clearInterval(interval) // this will clear interval if any of the above happpens
+        
+    }
+
+
+     }
+
+
+
+    /* assegnamo funzioni alle frecce della tastiera,ogni tasto della tastiera ha un suo 'KEYCODE'.
+    Assegnandogli le funzioni decidiamo cosa quel tasto debba fare*/
 
     function control(e) {
         squares[currentIndex].classList.remove('snake') // rimuoviamo le classi .snake da tutti gli squares
@@ -31,6 +68,10 @@ document.addEventListener('DOMContentLoaded', () => {
             direction = +width // 'if we press down the snake goes down'
         }
     }
+    document.addEventListener('keyup', control) // abbiamo costruito un EventListener che diche : 'ogni volta che una delle frecce viene schiacciata, esegui la funzione control'
+
+
+
 
 
 })
